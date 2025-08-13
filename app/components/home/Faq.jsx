@@ -13,7 +13,7 @@ const FAQ = () => {
     {
       icon: Wallet,
       title: 'Wallet & Security',
-      gradient: 'from-blue-500 to-cyan-500',
+      gradient: 'from-blue-500 to-blue-600',
       faqs: [
         {
           question: 'How secure is my USFranc wallet?',
@@ -32,7 +32,7 @@ const FAQ = () => {
     {
       icon: CreditCard,
       title: 'Trading & Transactions',
-      gradient: 'from-green-500 to-emerald-500',
+      gradient: 'from-green-500 to-green-600',
       faqs: [
         {
           question: 'What are the trading fees?',
@@ -51,7 +51,7 @@ const FAQ = () => {
     {
       icon: Shield,
       title: 'Account & Verification',
-      gradient: 'from-purple-500 to-indigo-500',
+      gradient: 'from-blue-600 to-blue-700',
       faqs: [
         {
           question: 'Why do I need to verify my account?',
@@ -70,7 +70,7 @@ const FAQ = () => {
     {
       icon: Users,
       title: 'Support & General',
-      gradient: 'from-orange-500 to-red-500',
+      gradient: 'from-blue-500 to-indigo-600',
       faqs: [
         {
           question: 'How can I contact customer support?',
@@ -89,17 +89,17 @@ const FAQ = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl mb-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl mb-6 shadow-lg">
             <HelpCircle className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Frequently Asked <span className="bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">Questions</span>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            Frequently Asked <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">Questions</span>
           </h2>
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Get answers to common questions about USFranc wallet and trading platform
           </p>
         </div>
@@ -107,13 +107,13 @@ const FAQ = () => {
         {/* FAQ Categories */}
         <div className="space-y-8">
           {faqCategories.map((category, categoryIndex) => (
-            <div key={categoryIndex} className="bg-slate-900/50 backdrop-blur-xl rounded-3xl border border-white/10 p-8">
+            <div key={categoryIndex} className="bg-white backdrop-blur-xl rounded-3xl border border-gray-200 p-8 shadow-lg hover:shadow-xl transition-shadow">
               {/* Category Header */}
               <div className="flex items-center space-x-4 mb-8">
-                <div className={`w-12 h-12 bg-gradient-to-r ${category.gradient} rounded-xl flex items-center justify-center`}>
+                <div className={`w-12 h-12 bg-gradient-to-r ${category.gradient} rounded-xl flex items-center justify-center shadow-lg`}>
                   <category.icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-white">{category.title}</h3>
+                <h3 className="text-2xl font-bold text-gray-900">{category.title}</h3>
               </div>
 
               {/* FAQ Items */}
@@ -125,26 +125,26 @@ const FAQ = () => {
                   return (
                     <div
                       key={faqIndex}
-                      className="bg-slate-800/30 rounded-xl border border-white/5 overflow-hidden transition-all duration-300 hover:border-white/10"
+                      className="bg-gray-50 rounded-xl border border-gray-200 overflow-hidden transition-all duration-300 hover:border-blue-300 hover:shadow-md"
                     >
                       <button
                         onClick={() => toggleFAQ(globalIndex)}
-                        className="w-full flex items-center justify-between p-6 text-left hover:bg-white/5 transition-colors"
+                        className="w-full flex items-center justify-between p-6 text-left hover:bg-blue-50 transition-colors"
                       >
-                        <h4 className="text-lg font-semibold text-white pr-4">{faq.question}</h4>
+                        <h4 className="text-lg font-semibold text-gray-900 pr-4">{faq.question}</h4>
                         <div className="flex-shrink-0">
                           {isOpen ? (
-                            <ChevronUp className="w-5 h-5 text-blue-400" />
+                            <ChevronUp className="w-5 h-5 text-blue-600" />
                           ) : (
-                            <ChevronDown className="w-5 h-5 text-slate-400" />
+                            <ChevronDown className="w-5 h-5 text-gray-500" />
                           )}
                         </div>
                       </button>
                       
                       {isOpen && (
                         <div className="px-6 pb-6">
-                          <div className="pt-4 border-t border-white/10">
-                            <p className="text-slate-300 leading-relaxed">{faq.answer}</p>
+                          <div className="pt-4 border-t border-gray-200">
+                            <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
                           </div>
                         </div>
                       )}
@@ -158,16 +158,16 @@ const FAQ = () => {
 
         {/* Still Have Questions */}
         <div className="mt-16 text-center">
-          <div className="bg-slate-900/50 backdrop-blur-xl rounded-3xl border border-white/10 p-8">
-            <h3 className="text-2xl font-bold text-white mb-4">Still Have Questions?</h3>
-            <p className="text-slate-400 mb-6 max-w-2xl mx-auto">
+          <div className="bg-white backdrop-blur-xl rounded-3xl border border-gray-200 p-8 shadow-lg">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Still Have Questions?</h3>
+            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
               Can't find what you're looking for? Our support team is here to help you 24/7
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button className="bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105">
+              <button className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
                 Contact Support
               </button>
-              <button className="border border-slate-600 hover:border-slate-400 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:bg-white/5">
+              <button className="border-2 border-blue-600 hover:border-blue-700 text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-8 py-3 rounded-xl font-semibold transition-all duration-300">
                 Join Community
               </button>
             </div>
