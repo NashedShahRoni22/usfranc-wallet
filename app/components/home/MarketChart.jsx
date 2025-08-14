@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-import { ArrowDownRight, ArrowUpRight, TrendingUp, Eye, Star } from 'lucide-react';
+import { ArrowDownRight, ArrowUpRight, TrendingUp, Eye, Star, MoreVertical } from 'lucide-react';
 
 export default function MarketChart() {
   const [selectedTimeframe, setSelectedTimeframe] = useState('24h');
@@ -25,64 +25,64 @@ export default function MarketChart() {
   };
 
   return (
-    <section className="py-16 bg-gradient-to-br from-gray-50 to-blue-50">
+    <section className="py-8 md:py-16 bg-gradient-to-br from-gray-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 md:mb-12">
           <div className="flex items-center justify-center mb-4">
-            <TrendingUp className="w-8 h-8 text-blue-600 mr-3" />
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
+            <TrendingUp className="w-6 h-6 md:w-8 md:h-8 text-blue-600 mr-2 md:mr-3" />
+            <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900">
               Market <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">Overview</span>
             </h2>
           </div>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto px-4">
             Track real-time cryptocurrency prices and market movements
           </p>
         </div>
 
         {/* Market Stats Summary */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white backdrop-blur-xl rounded-2xl border border-blue-200 p-6 shadow-lg hover:shadow-xl transition-shadow">
-            <div className="text-blue-600 text-sm font-medium mb-1">Total Market Cap</div>
-            <div className="text-gray-900 text-2xl font-bold">$2.4T</div>
-            <div className="text-green-600 text-sm flex items-center mt-2">
-              <ArrowUpRight className="w-4 h-4 mr-1" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6 md:mb-8">
+          <div className="bg-white backdrop-blur-xl rounded-xl md:rounded-2xl border border-blue-200 p-4 md:p-6 shadow-lg hover:shadow-xl transition-shadow">
+            <div className="text-blue-600 text-xs md:text-sm font-medium mb-1">Total Market Cap</div>
+            <div className="text-gray-900 text-xl md:text-2xl font-bold">$2.4T</div>
+            <div className="text-green-600 text-xs md:text-sm flex items-center mt-2">
+              <ArrowUpRight className="w-3 h-3 md:w-4 md:h-4 mr-1" />
               +2.4% (24h)
             </div>
           </div>
-          <div className="bg-white backdrop-blur-xl rounded-2xl border border-gray-200 p-6 shadow-lg hover:shadow-xl transition-shadow">
-            <div className="text-gray-600 text-sm font-medium mb-1">24h Volume</div>
-            <div className="text-gray-900 text-2xl font-bold">$89.2B</div>
-            <div className="text-red-600 text-sm flex items-center mt-2">
-              <ArrowDownRight className="w-4 h-4 mr-1" />
+          <div className="bg-white backdrop-blur-xl rounded-xl md:rounded-2xl border border-gray-200 p-4 md:p-6 shadow-lg hover:shadow-xl transition-shadow">
+            <div className="text-gray-600 text-xs md:text-sm font-medium mb-1">24h Volume</div>
+            <div className="text-gray-900 text-xl md:text-2xl font-bold">$89.2B</div>
+            <div className="text-red-600 text-xs md:text-sm flex items-center mt-2">
+              <ArrowDownRight className="w-3 h-3 md:w-4 md:h-4 mr-1" />
               -1.2% (24h)
             </div>
           </div>
-          <div className="bg-white backdrop-blur-xl rounded-2xl border border-blue-200 p-6 shadow-lg hover:shadow-xl transition-shadow">
-            <div className="text-blue-600 text-sm font-medium mb-1">BTC Dominance</div>
-            <div className="text-gray-900 text-2xl font-bold">52.3%</div>
-            <div className="text-green-600 text-sm flex items-center mt-2">
-              <ArrowUpRight className="w-4 h-4 mr-1" />
+          <div className="bg-white backdrop-blur-xl rounded-xl md:rounded-2xl border border-blue-200 p-4 md:p-6 shadow-lg hover:shadow-xl transition-shadow">
+            <div className="text-blue-600 text-xs md:text-sm font-medium mb-1">BTC Dominance</div>
+            <div className="text-gray-900 text-xl md:text-2xl font-bold">52.3%</div>
+            <div className="text-green-600 text-xs md:text-sm flex items-center mt-2">
+              <ArrowUpRight className="w-3 h-3 md:w-4 md:h-4 mr-1" />
               +0.8% (24h)
             </div>
           </div>
         </div>
 
         {/* Main Market Table */}
-        <div className="bg-white backdrop-blur-xl rounded-3xl border border-gray-200 shadow-xl overflow-hidden">
+        <div className="bg-white backdrop-blur-xl rounded-2xl md:rounded-3xl border border-gray-200 shadow-xl overflow-hidden">
           {/* Table Header */}
-          <div className="bg-gradient-to-r from-blue-50 to-blue-100 border-b border-gray-200 p-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-2xl font-bold text-gray-900 flex items-center">
-                <Star className="w-6 h-6 text-blue-600 mr-3" />
+          <div className="bg-gradient-to-r from-blue-50 to-blue-100 border-b border-gray-200 p-4 md:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+              <h3 className="text-lg md:text-2xl font-bold text-gray-900 flex items-center">
+                <Star className="w-5 h-5 md:w-6 md:h-6 text-blue-600 mr-2 md:mr-3" />
                 Top Cryptocurrencies
               </h3>
-              <div className="flex items-center space-x-2 bg-white rounded-xl p-1 border border-gray-300 shadow-sm">
+              <div className="flex items-center space-x-1 bg-white rounded-lg md:rounded-xl p-1 border border-gray-300 shadow-sm overflow-x-auto">
                 {timeframes.map((timeframe) => (
                   <button
                     key={timeframe}
                     onClick={() => setSelectedTimeframe(timeframe)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    className={`px-2 md:px-4 py-1 md:py-2 rounded-md md:rounded-lg text-xs md:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                       selectedTimeframe === timeframe
                         ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg'
                         : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
@@ -95,18 +95,75 @@ export default function MarketChart() {
             </div>
           </div>
 
-          {/* Table Content */}
-          <div className="overflow-x-auto">
+          {/* Mobile Card View */}
+          <div className="block md:hidden">
+            {marketData.map((coin, index) => (
+              <div key={coin.symbol} className="border-b border-gray-100 p-4 hover:bg-blue-50/50 transition-all duration-200">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="text-gray-500 text-sm font-medium w-6">{coin.rank}</div>
+                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                      {coin.icon}
+                    </div>
+                    <div>
+                      <div className="text-gray-900 font-semibold text-base">{coin.name}</div>
+                      <div className="text-gray-500 text-sm">{coin.symbol}</div>
+                    </div>
+                  </div>
+                  <button className="text-gray-400 hover:text-gray-600">
+                    <MoreVertical className="w-4 h-4" />
+                  </button>
+                </div>
+                
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-gray-900 font-bold text-lg">
+                    {formatPrice(coin.price)}
+                  </div>
+                  <div className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full font-semibold text-sm ${
+                    coin.change > 0 
+                      ? 'bg-green-100 text-green-700 border border-green-200' 
+                      : 'bg-red-100 text-red-700 border border-red-200'
+                  }`}>
+                    {coin.change > 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                    <span>{Math.abs(coin.change)}%</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 mb-3 text-xs">
+                  <div>
+                    <div className="text-gray-500">Market Cap</div>
+                    <div className="text-gray-700 font-medium">${coin.marketCap}</div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500">Volume (24h)</div>
+                    <div className="text-gray-700 font-medium">{coin.volume}</div>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <button className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-md">
+                    Buy
+                  </button>
+                  <button className="bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg text-sm transition-all duration-200 border border-gray-200">
+                    <Eye className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop Table View */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr className="border-b border-gray-200">
-                  <th className="text-left py-4 px-6 text-gray-600 font-semibold text-sm">#</th>
-                  <th className="text-left py-4 px-6 text-gray-600 font-semibold text-sm">Asset</th>
-                  <th className="text-right py-4 px-6 text-gray-600 font-semibold text-sm">Price</th>
-                  <th className="text-right py-4 px-6 text-gray-600 font-semibold text-sm">24h Change</th>
-                  <th className="text-right py-4 px-6 text-gray-600 font-semibold text-sm hidden md:table-cell">Market Cap</th>
-                  <th className="text-right py-4 px-6 text-gray-600 font-semibold text-sm hidden lg:table-cell">Volume (24h)</th>
-                  <th className="text-center py-4 px-6 text-gray-600 font-semibold text-sm">Actions</th>
+                  <th className="text-left py-4 px-4 lg:px-6 text-gray-600 font-semibold text-sm">#</th>
+                  <th className="text-left py-4 px-4 lg:px-6 text-gray-600 font-semibold text-sm">Asset</th>
+                  <th className="text-right py-4 px-4 lg:px-6 text-gray-600 font-semibold text-sm">Price</th>
+                  <th className="text-right py-4 px-4 lg:px-6 text-gray-600 font-semibold text-sm">24h Change</th>
+                  <th className="text-right py-4 px-4 lg:px-6 text-gray-600 font-semibold text-sm hidden lg:table-cell">Market Cap</th>
+                  <th className="text-right py-4 px-4 lg:px-6 text-gray-600 font-semibold text-sm hidden xl:table-cell">Volume (24h)</th>
+                  <th className="text-center py-4 px-4 lg:px-6 text-gray-600 font-semibold text-sm">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -115,50 +172,48 @@ export default function MarketChart() {
                     key={coin.symbol} 
                     className="border-b border-gray-100 hover:bg-blue-50/50 transition-all duration-200 group"
                   >
-                    <td className="py-5 px-6">
+                    <td className="py-4 lg:py-5 px-4 lg:px-6">
                       <div className="text-gray-700 font-semibold">{coin.rank}</div>
                     </td>
-                    <td className="py-5 px-6">
-                      <div className="flex items-center space-x-4">
-                        <div className="relative">
-                          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
-                            {coin.icon}
-                          </div>
+                    <td className="py-4 lg:py-5 px-4 lg:px-6">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg text-sm lg:text-base">
+                          {coin.icon}
                         </div>
                         <div>
-                          <div className="text-gray-900 font-semibold text-base group-hover:text-blue-700 transition-colors">{coin.name}</div>
-                          <div className="text-gray-500 text-sm font-medium">{coin.symbol}</div>
+                          <div className="text-gray-900 font-semibold text-sm lg:text-base group-hover:text-blue-700 transition-colors">{coin.name}</div>
+                          <div className="text-gray-500 text-xs lg:text-sm font-medium">{coin.symbol}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="py-5 px-6 text-right">
-                      <div className="text-gray-900 font-bold text-lg">
+                    <td className="py-4 lg:py-5 px-4 lg:px-6 text-right">
+                      <div className="text-gray-900 font-bold text-base lg:text-lg">
                         {formatPrice(coin.price)}
                       </div>
                     </td>
-                    <td className="py-5 px-6 text-right">
-                      <div className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full font-semibold text-sm ${
+                    <td className="py-4 lg:py-5 px-4 lg:px-6 text-right">
+                      <div className={`inline-flex items-center space-x-1 px-2 lg:px-3 py-1 rounded-full font-semibold text-xs lg:text-sm ${
                         coin.change > 0 
                           ? 'bg-green-100 text-green-700 border border-green-200' 
                           : 'bg-red-100 text-red-700 border border-red-200'
                       }`}>
-                        {coin.change > 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
+                        {coin.change > 0 ? <ArrowUpRight className="w-3 h-3 lg:w-4 lg:h-4" /> : <ArrowDownRight className="w-3 h-3 lg:w-4 lg:h-4" />}
                         <span>{Math.abs(coin.change)}%</span>
                       </div>
                     </td>
-                    <td className="py-5 px-6 text-right text-gray-700 font-medium hidden md:table-cell">
+                    <td className="py-4 lg:py-5 px-4 lg:px-6 text-right text-gray-700 font-medium text-sm hidden lg:table-cell">
                       ${coin.marketCap}
                     </td>
-                    <td className="py-5 px-6 text-right text-gray-700 font-medium hidden lg:table-cell">
+                    <td className="py-4 lg:py-5 px-4 lg:px-6 text-right text-gray-700 font-medium text-sm hidden xl:table-cell">
                       {formatVolume(coin.volume)}
                     </td>
-                    <td className="py-5 px-6 text-center">
+                    <td className="py-4 lg:py-5 px-4 lg:px-6 text-center">
                       <div className="flex items-center justify-center space-x-2">
-                        <button className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                        <button className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-3 lg:px-4 py-2 rounded-lg text-xs lg:text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5">
                           Buy
                         </button>
-                        <button className="bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-blue-600 px-3 py-2 rounded-lg text-sm transition-all duration-200 border border-gray-200">
-                          <Eye className="w-4 h-4" />
+                        <button className="bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-blue-600 px-2 lg:px-3 py-2 rounded-lg text-sm transition-all duration-200 border border-gray-200">
+                          <Eye className="w-3 h-3 lg:w-4 lg:h-4" />
                         </button>
                       </div>
                     </td>
@@ -169,12 +224,12 @@ export default function MarketChart() {
           </div>
 
           {/* Table Footer */}
-          <div className="bg-gray-50 border-t border-gray-200 p-6">
-            <div className="flex items-center justify-between">
-              <div className="text-gray-500 text-sm">
+          <div className="bg-gray-50 border-t border-gray-200 p-4 md:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+              <div className="text-gray-500 text-xs md:text-sm">
                 Showing top 6 cryptocurrencies • Updated every 30 seconds
               </div>
-              <button className="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors">
+              <button className="text-blue-600 hover:text-blue-800 text-xs md:text-sm font-medium transition-colors text-left sm:text-right">
                 View All Markets →
               </button>
             </div>

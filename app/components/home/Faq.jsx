@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { ChevronDown, ChevronUp, HelpCircle, Shield, Wallet, CreditCard, Users } from 'lucide-react';
 
 const FAQ = () => {
+  const [activeTab, setActiveTab] = useState(0);
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggleFAQ = (index) => {
@@ -104,56 +105,77 @@ const FAQ = () => {
           </p>
         </div>
 
-        {/* FAQ Categories */}
-        <div className="space-y-8">
-          {faqCategories.map((category, categoryIndex) => (
-            <div key={categoryIndex} className="bg-white backdrop-blur-xl rounded-3xl border border-gray-200 p-8 shadow-lg hover:shadow-xl transition-shadow">
-              {/* Category Header */}
-              <div className="flex items-center space-x-4 mb-8">
-                <div className={`w-12 h-12 bg-gradient-to-r ${category.gradient} rounded-xl flex items-center justify-center shadow-lg`}>
-                  <category.icon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900">{category.title}</h3>
-              </div>
-
-              {/* FAQ Items */}
-              <div className="space-y-4">
-                {category.faqs.map((faq, faqIndex) => {
-                  const globalIndex = categoryIndex * 10 + faqIndex;
-                  const isOpen = openIndex === globalIndex;
-
-                  return (
-                    <div
-                      key={faqIndex}
-                      className="bg-gray-50 rounded-xl border border-gray-200 overflow-hidden transition-all duration-300 hover:border-blue-300 hover:shadow-md"
-                    >
-                      <button
-                        onClick={() => toggleFAQ(globalIndex)}
-                        className="w-full flex items-center justify-between p-6 text-left hover:bg-blue-50 transition-colors"
-                      >
-                        <h4 className="text-lg font-semibold text-gray-900 pr-4">{faq.question}</h4>
-                        <div className="flex-shrink-0">
-                          {isOpen ? (
-                            <ChevronUp className="w-5 h-5 text-blue-600" />
-                          ) : (
-                            <ChevronDown className="w-5 h-5 text-gray-500" />
-                          )}
-                        </div>
-                      </button>
-                      
-                      {isOpen && (
-                        <div className="px-6 pb-6">
-                          <div className="pt-4 border-t border-gray-200">
-                            <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
-                          </div>
-                        </div>
-                      )}
+        {/* Tab Navigation */}
+        <div className="bg-white backdrop-blur-xl rounded-3xl border border-gray-200 shadow-lg overflow-hidden">
+          <div className="border-b border-gray-200">
+            <div className="flex flex-wrap">
+              {faqCategories.map((category, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    setActiveTab(index);
+                    setOpenIndex(null); // Reset open FAQ when switching tabs
+                  }}
+                  className={`flex-1 min-w-0 px-6 py-4 text-center border-b-2 transition-all duration-300 ${
+                    activeTab === index
+                      ? 'border-blue-600 bg-blue-50 text-blue-600'
+                      : 'border-transparent hover:border-gray-300 hover:bg-gray-50 text-gray-600'
+                  }`}
+                >
+                  <div className="flex flex-col items-center space-y-2">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      activeTab === index 
+                        ? `bg-gradient-to-r ${category.gradient}` 
+                        : 'bg-gray-200'
+                    }`}>
+                      <category.icon className={`w-5 h-5 ${
+                        activeTab === index ? 'text-white' : 'text-gray-500'
+                      }`} />
                     </div>
-                  );
-                })}
-              </div>
+                    <span className="text-sm font-semibold truncate">{category.title}</span>
+                  </div>
+                </button>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Tab Content */}
+          <div className="p-8">
+            <div className="space-y-4">
+              {faqCategories[activeTab].faqs.map((faq, faqIndex) => {
+                const isOpen = openIndex === faqIndex;
+
+                return (
+                  <div
+                    key={faqIndex}
+                    className="bg-gray-50 rounded-xl border border-gray-200 overflow-hidden transition-all duration-300 hover:border-blue-300 hover:shadow-md"
+                  >
+                    <button
+                      onClick={() => toggleFAQ(faqIndex)}
+                      className="w-full flex items-center justify-between p-6 text-left hover:bg-blue-50 transition-colors"
+                    >
+                      <h4 className="text-lg font-semibold text-gray-900 pr-4">{faq.question}</h4>
+                      <div className="flex-shrink-0">
+                        {isOpen ? (
+                          <ChevronUp className="w-5 h-5 text-blue-600" />
+                        ) : (
+                          <ChevronDown className="w-5 h-5 text-gray-500" />
+                        )}
+                      </div>
+                    </button>
+                    
+                    {isOpen && (
+                      <div className="px-6 pb-6">
+                        <div className="pt-4 border-t border-gray-200">
+                          <p className="text-gray-700 leading-relaxed">{faq.answer}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         {/* Still Have Questions */}
