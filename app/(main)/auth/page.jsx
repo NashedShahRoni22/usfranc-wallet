@@ -424,7 +424,7 @@ const CryptoWalletAuth = () => {
               <button
                 key={item.key}
                 onClick={() => setCurrentPage(item.key)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-medium transition-all duration-200 ${
+                className={`cursor-pointer flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-medium transition-all duration-200 ${
                   currentPage === item.key
                     ? 'bg-blue-600 text-white shadow-lg scale-105'
                     : 'text-slate-400 hover:text-white hover:bg-white/10'
