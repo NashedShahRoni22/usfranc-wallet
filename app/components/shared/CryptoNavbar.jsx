@@ -19,7 +19,7 @@ const CryptoNavbar = () => {
     { id: 'security', name: 'Security', icon: Shield, href: '/security' },
     { id: 'support', name: 'Support', icon: HelpCircle, href: '/support' },
     { id: 'notifications', name: 'Notifications', icon: Bell, href: '/notifications', hasBadge: true },
-    { id: 'profile', name: 'Profile', icon: User, href: '/profile' }
+    { id: 'profile', name: 'Profile', icon: User, href: '/dashboard' }
   ];
 
   return (
