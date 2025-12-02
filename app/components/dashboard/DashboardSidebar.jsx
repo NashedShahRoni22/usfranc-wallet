@@ -118,13 +118,14 @@ const DashboardSidebar = ({ isOpen, onClose }) => {
             </button>
 
             {/* Help Card */}
-            <div className="bg-gradient-to-r from-blue-600/10 to-indigo-600/10 rounded-xl p-4 border border-blue-500/20">
+            {/* <div className="bg-gradient-to-r from-blue-600/10 to-indigo-600/10 rounded-xl p-4 border border-blue-500/20">
               <p className="text-sm text-slate-300 font-medium mb-1">Need Help?</p>
               <p className="text-xs text-slate-400 mb-3">Check our documentation</p>
               <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm py-2 rounded-lg transition-all">
                 View Docs
               </button>
-            </div>
+            </div> */}
+
           </div>
         </div>
       </aside>

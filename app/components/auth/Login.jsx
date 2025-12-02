@@ -3,9 +3,12 @@ import { useState } from "react";
 import { Mail, Lock, Loader2, Eye, EyeOff, CheckCircle2, ArrowLeft } from "lucide-react";
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import { useApp } from "@/app/context/AppContext";
 
 export default function WalletLogin({setView}) {
   const router = useRouter();
+  const { login, storeSessionData } = useApp();
+  
   const [step, setStep] = useState(1); // 1: Login, 2: OTP Verification
   const [formData, setFormData] = useState({
     email: "",
@@ -59,6 +62,10 @@ export default function WalletLogin({setView}) {
       
       if (res.ok) {
         setSessionData(data);
+        
+        // Store session data in context and localStorage
+        storeSessionData(data);
+        
         setStep(2);
         toast.success("OTP sent successfully! Please check your email.");
         startOtpTimer();
@@ -112,17 +119,17 @@ export default function WalletLogin({setView}) {
         toast.success("OTP verified successfully! Redirecting to dashboard...");
         console.log("OTP Verification Response:", data);
         
-        // Store session data if needed
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('clientId', sessionData.clientId);
-          localStorage.setItem('userName', sessionData.name);
-          localStorage.setItem('sessionId', sessionData.sessionId);
-        }
+        // Use context login function to store all user data
+        const loginSuccess = login(data);
         
-        // Redirect to dashboard after a short delay
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 1500);
+        if (loginSuccess) {
+          // Redirect to dashboard after a short delay
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 1500);
+        } else {
+          toast.error("Failed to complete login. Please try again.");
+        }
       } else {
         toast.error(data.message || "Invalid OTP. Please try again.");
       }
@@ -170,6 +177,7 @@ export default function WalletLogin({setView}) {
       
       if (res.ok) {
         setSessionData(data);
+        storeSessionData(data);
         setOtpTimer(300);
         setOtp("");
         toast.success("OTP resent successfully!");
