@@ -11,7 +11,7 @@ export default function PrivateRoute({ children }) {
   useEffect(() => {
     if (!isLoading) {
       if (!isAuthenticated || isTokenExpired()) {
-        router.push('/auth');
+        router.push('/');
       }
     }
   }, [isAuthenticated, isLoading, router]);

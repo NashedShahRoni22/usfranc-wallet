@@ -7,7 +7,8 @@ import {
   Shield, 
   HelpCircle,
   Bell,
-  User
+  User,
+  HomeIcon
 } from 'lucide-react';
 
 const CryptoNavbar = () => {
@@ -15,6 +16,7 @@ const CryptoNavbar = () => {
 
   // Single array to manage all menu items
   const menuItems = [
+    { id: 'wallet', name: 'Wallet', icon: HomeIcon, href: '/home' },
     { id: 'wallet', name: 'Wallet', icon: Wallet, href: '/wallet' },
     { id: 'security', name: 'Security', icon: Shield, href: '/security' },
     { id: 'support', name: 'Support', icon: HelpCircle, href: '/support' },
@@ -27,7 +29,7 @@ const CryptoNavbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <a href="/" className="flex items-center space-x-3">
+          <a href="/home" className="flex items-center space-x-3">
             <div className="flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl shadow-lg">
               <span className="text-white font-bold text-lg">UF</span>
             </div>

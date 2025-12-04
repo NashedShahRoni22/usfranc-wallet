@@ -1,20 +1,17 @@
-import FAQ from "../components/home/Faq";
-import Features from "../components/home/Features";
-import LandingBanner from "../components/home/LandingBanner";
-import MarketChart from "../components/home/MarketChart";
-import MarketOverview from "../components/home/MarketOverview";
-import Newsletter from "../components/home/Newsletter";
-
+"use client";
+import Login from "@/app/components/auth/Login";
+import Registration from "@/app/components/auth/Registration";
+import { useState } from "react";
 
 export default function page() {
+  const [view, setView] = useState(1);
   return (
-    <section>
-      <LandingBanner/>
-      <MarketOverview/>
-      {/* <MarketChart/> */}
-      <Features/>
-      <FAQ/>
-      <Newsletter/>
-    </section>
-  )
+    <div>
+      {view === 1 ? (
+        <Login setView={setView} />
+      ) : (
+        <Registration setView={setView} />
+      )}
+    </div>
+  );
 }

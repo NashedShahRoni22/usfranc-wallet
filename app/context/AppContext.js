@@ -129,7 +129,7 @@ export const AppProvider = ({ children }) => {
       setIsAuthenticated(false);
 
       // Redirect to login
-      router.push('/auth');
+      router.push('/');
     } catch (error) {
       console.error('Error during logout:', error);
     }

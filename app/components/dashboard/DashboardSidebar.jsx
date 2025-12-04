@@ -106,8 +106,8 @@ const DashboardSidebar = ({ isOpen, onClose }) => {
             {/* Logout Button */}
             <button
               onClick={() => {
-                console.log('Logging out...');
-                router.push('/auth');
+                localStorage.clear();
+                router.push('/');
               }}
               className="cursor-pointer flex items-center space-x-3 px-4 py-3 rounded-xl w-full
                 text-red-400 hover:text-red-300 hover:bg-red-500/10
