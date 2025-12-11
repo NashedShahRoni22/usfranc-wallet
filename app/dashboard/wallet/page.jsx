@@ -18,7 +18,7 @@ export default function WalletPage() {
   const [showAddWallet, setShowAddWallet] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-
+  
   // Fetch all wallets on component mount
   useEffect(() => {
     if (user.clientId && user.token) {
@@ -31,7 +31,7 @@ export default function WalletPage() {
       setIsLoading(true);
       setError('');
 
-      const response = await fetch('https://server.usfrancwallet.com/v1/v1/wallet/get/meta/all', {
+      const response = await fetch('https://server.usfrancwallet.com/v1/wallet/get/meta/all', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${user.token}`,

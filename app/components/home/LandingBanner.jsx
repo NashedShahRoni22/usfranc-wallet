@@ -15,7 +15,7 @@ export default function LandingBanner() {
               The Future of
               <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500 bg-clip-text text-transparent"> Crypto</span>
               <br />
-              Trading is Here
+              Swapping is Here
             </h1>
             <p className="text-xl md:text-2xl text-indigo-200 max-w-3xl mx-auto leading-relaxed">
               Experience seamless, secure, and lightning-fast cryptocurrency transactions with USFranc Wallet. 
