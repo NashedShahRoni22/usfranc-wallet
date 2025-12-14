@@ -44,9 +44,10 @@ export default function WalletPage() {
       }
 
       const data = await response.json();
+      console.log(data);
       
       // Transform API response to match UI format
-      const transformedWallets = data.wallets?.map((wallet, index) => ({
+      const transformedWallets = data?.map((wallet, index) => ({
         id: wallet.id || wallet._id,
         name: wallet.name,
         address: wallet.address || wallet.publicKey || 'N/A',
