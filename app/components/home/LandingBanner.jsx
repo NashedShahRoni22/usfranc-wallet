@@ -8,53 +8,59 @@ export default function LandingBanner() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(129,140,248,0.15),transparent_50%)]"></div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center space-y-8">
-          {/* Main Headline */}
-          <div className="space-y-6">
-            <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight">
-              A secure wallet interface for blockchain interaction
-            </h1>
-            <p className="text-xl md:text-2xl text-indigo-200 max-w-3xl mx-auto leading-relaxed">
-              Store, transfer, swap, and use digital assets across supported networks.
-            </p>
-          </div>
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Side - Content */}
+          <div className="space-y-8 text-center lg:text-left">
+            {/* Main Headline */}
+            <div className="space-y-6">
+              <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-white via-indigo-200 to-blue-300 bg-clip-text text-transparent leading-tight">
+                A secure wallet interface for blockchain interaction
+              </h1>
+              <p className="text-xl md:text-2xl text-indigo-200 max-w-2xl lg:max-w-none leading-relaxed">
+                Store, transfer, swap, and use digital assets across supported networks.
+              </p>
+            </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto py-8">
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-white mb-2">
-                $2.4B+
-              </div>
-              <div className="text-indigo-300">Total Volume</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-white mb-2">
-                500K+
-              </div>
-              <div className="text-indigo-300">Active Users</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-white mb-2">
-                99.9%
-              </div>
-              <div className="text-indigo-300">Uptime</div>
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center lg:items-start lg:justify-start justify-center gap-4 pt-4">
+              <button className="group bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center space-x-2">
+                <span>Get Started Now</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+              <button className="border border-indigo-500 hover:border-indigo-400 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:bg-indigo-800/30">
+                Watch Demo
+              </button>
             </div>
           </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-            <button className="group bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center space-x-2">
-              <span>Get Started Now</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button className="border border-indigo-500 hover:border-indigo-400 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:bg-indigo-800/30">
-              Watch Demo
-            </button>
-          </div>
+          {/* Right Side - Stats & Floating Cards */}
+          <div className="relative hidden lg:flex items-center justify-center">
+            {/* Stats Cards */}
+            <div className="space-y-6 z-10 relative">
+              <div className="bg-indigo-900/40 backdrop-blur-xl rounded-3xl p-8 border border-indigo-400/30 shadow-2xl transform hover:scale-105 transition-all duration-300">
+                <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent mb-3">
+                  $2.4B+
+                </div>
+                <div className="text-indigo-300 text-lg">Total Volume</div>
+              </div>
+              
+              <div className="bg-indigo-900/40 backdrop-blur-xl rounded-3xl p-8 border border-indigo-400/30 shadow-2xl transform hover:scale-105 transition-all duration-300 ml-12">
+                <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 to-pink-300 bg-clip-text text-transparent mb-3">
+                  500K+
+                </div>
+                <div className="text-indigo-300 text-lg">Active Users</div>
+              </div>
+              
+              <div className="bg-indigo-900/40 backdrop-blur-xl rounded-3xl p-8 border border-indigo-400/30 shadow-2xl transform hover:scale-105 transition-all duration-300">
+                <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent mb-3">
+                  99.9%
+                </div>
+                <div className="text-indigo-300 text-lg">Uptime</div>
+              </div>
+            </div>
 
-          {/* Floating Cards */}
-          <div className="relative mt-16">
-            <div className="absolute -top-4 left-1/4 bg-indigo-900/60 backdrop-blur-xl rounded-2xl p-4 border border-indigo-400/20 animate-pulse">
+            {/* Floating Info Cards */}
+            <div className="absolute top-8 -right-8 bg-indigo-900/60 backdrop-blur-xl rounded-2xl p-4 border border-indigo-400/20 animate-pulse shadow-xl">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
                   <TrendingUp className="w-4 h-4 text-white" />
@@ -69,7 +75,7 @@ export default function LandingBanner() {
             </div>
 
             <div
-              className="absolute -top-8 right-1/4 bg-indigo-900/60 backdrop-blur-xl rounded-2xl p-4 border border-indigo-400/20 animate-pulse"
+              className="absolute bottom-8 -left-8 bg-indigo-900/60 backdrop-blur-xl rounded-2xl p-4 border border-indigo-400/20 animate-pulse shadow-xl"
               style={{ animationDelay: "1s" }}
             >
               <div className="flex items-center space-x-3">

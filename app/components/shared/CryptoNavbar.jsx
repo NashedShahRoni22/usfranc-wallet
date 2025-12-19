@@ -17,7 +17,7 @@ const CryptoNavbar = () => {
   // Single array to manage all menu items
   const menuItems = [
     { id: 'wallet', name: 'Home', icon: HomeIcon, href: '/home' },
-    { id: 'wallet', name: 'Wallet', icon: Wallet, href: '/wallet' },
+    // { id: 'wallet', name: 'Wallet', icon: Wallet, href: '/wallet' },
     { id: 'security', name: 'Security', icon: Shield, href: '/security' },
     { id: 'notice', name: 'Notice', icon: HelpCircle, href: '/notice' },
     { id: 'portfolio', name: 'Portfolio', icon: User, href: '/portfolio', hasBadge: true },
