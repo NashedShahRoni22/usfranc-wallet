@@ -20,19 +20,22 @@ const AddWalletModal = ({
   token,
 }) => {
   const [showMnemonic, setShowMnemonic] = useState(false);
-  const [generatedMnemonic, setGeneratedMnemonic] = useState("");
+  const [generatedMnemonic, setGeneratedMnemonic] = useState(""); 
   const [importedMnemonic, setImportedMnemonic] = useState("");
   const [encryptedKey, setEncryptedKey] = useState("");
   const [walletName, setWalletName] = useState("");
   const [step, setStep] = useState(1);
-  const [creationType, setCreationType] = useState(""); // 'new' or 'import'
+  const [creationType, setCreationType] = useState("");
   const [isValidMnemonic, setIsValidMnemonic] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   // Fixed public key PEM (RSA 1024-bit)
   const publicKeyPEM = `-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDKn8xQBjqxUjqLmF5P3jYnPXaHkGZMnqFvQ3jxH4Kj6mPqFQH7PxXLqQKrGHqXW8uHKGvGTqLBhJnQKFmPqHGqXW8uHKGvGTqLBhJnQKFmPqHGqXW8uHKGvGTqLBhJnQKFmPqHGqXW8uHKGvGTqLBhJnQKFmPqHGqXW8uHKGvGTqLBhJnQKFmPqHGqXW8uHwIDAQAB
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC0cOtPjzABybjzm3fCg1aCYwnx
+PmjXpbCkecAWLj/Cij1mJbFRuBuKxdB0V8I9xLp5vHCaXxPKJGvL3L3lLfJKjKcP
+8OxS1x6VfxLtlBFxCp0kTYfCGOp0eqQSZwjMQJGjJiP6qPNxCJGmW4eLCvM3fBvC
+R0xVGWqp7qL9TqLYMQIDAQAB
 -----END PUBLIC KEY-----`;
 
   // Validate BIP39 mnemonic using bip39 library
@@ -61,8 +64,8 @@ MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDKn8xQBjqxUjqLmF5P3jYnPXaHkGZMnqFvQ3jxH4Kj
   const generateBIP39Mnemonic = () => {
     try {
       const bip39 = require("bip39");
-      const mnemonic = bip39.generateMnemonic(); // Generates 12-word mnemonic by default
-      
+      const mnemonic = bip39.generateMnemonic();
+
       setGeneratedMnemonic(mnemonic);
       setCreationType("new");
       setStep(2);
@@ -96,15 +99,17 @@ MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDKn8xQBjqxUjqLmF5P3jYnPXaHkGZMnqFvQ3jxH4Kj
       let JSEncryptClass;
       try {
         const JSEncryptModule = require("jsencrypt");
-        JSEncryptClass = JSEncryptModule.JSEncrypt || JSEncryptModule.default || JSEncryptModule;
+        JSEncryptClass =
+          JSEncryptModule.JSEncrypt ||
+          JSEncryptModule.default ||
+          JSEncryptModule;
       } catch (e) {
         console.warn("JSEncrypt not available, using fallback");
-        // Fallback: Simple Base64 encoding (NOT SECURE - only for testing)
         return btoa(mnemonic);
       }
 
       const encrypt = new JSEncryptClass();
-      
+
       // Set the public key
       encrypt.setPublicKey(publicKeyPEM);
 
@@ -112,25 +117,24 @@ MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDKn8xQBjqxUjqLmF5P3jYnPXaHkGZMnqFvQ3jxH4Kj
       const keyValid = encrypt.getPublicKey();
       if (!keyValid) {
         console.warn("Public key appears invalid, using fallback");
-        // Fallback: Simple Base64 encoding (NOT SECURE - only for testing)
         return btoa(mnemonic);
       }
 
       // RSA 1024-bit can only encrypt ~117 bytes at a time
       // For longer data, we need to split it into chunks
-      const maxLength = 100; // Safe chunk size for RSA 1024-bit
+      const maxLength = 100;
       const chunks = [];
-      
+
       for (let i = 0; i < mnemonic.length; i += maxLength) {
         const chunk = mnemonic.substring(i, i + maxLength);
         const encryptedChunk = encrypt.encrypt(chunk);
-        
+
         if (!encryptedChunk || encryptedChunk === false) {
           console.warn("RSA encryption failed, using fallback");
           // Fallback: Simple Base64 encoding (NOT SECURE - only for testing)
           return btoa(mnemonic);
         }
-        
+
         chunks.push(encryptedChunk);
       }
 

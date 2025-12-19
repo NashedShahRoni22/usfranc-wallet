@@ -40,7 +40,7 @@ const CryptoFooter = () => {
     { text: "Privacy Policy", href: "#" },
     { text: "Terms of Service", href: "#" },
     { text: "Cookie Policy", href: "#" },
-    { text: "Legal", href: "#" }
+    { text: "Legal Notice", href: "/notice" }
   ];
 
   return (

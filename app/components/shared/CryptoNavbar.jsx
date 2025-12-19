@@ -6,9 +6,9 @@ import {
   Wallet, 
   Shield, 
   HelpCircle,
-  Bell,
   User,
-  HomeIcon
+  HomeIcon,
+  LayoutDashboard
 } from 'lucide-react';
 
 const CryptoNavbar = () => {
@@ -16,12 +16,12 @@ const CryptoNavbar = () => {
 
   // Single array to manage all menu items
   const menuItems = [
-    { id: 'wallet', name: 'Wallet', icon: HomeIcon, href: '/home' },
+    { id: 'wallet', name: 'Home', icon: HomeIcon, href: '/home' },
     { id: 'wallet', name: 'Wallet', icon: Wallet, href: '/wallet' },
     { id: 'security', name: 'Security', icon: Shield, href: '/security' },
-    { id: 'support', name: 'Support', icon: HelpCircle, href: '/support' },
-    { id: 'notifications', name: 'Notifications', icon: Bell, href: '/notifications', hasBadge: true },
-    { id: 'profile', name: 'Profile', icon: User, href: '/dashboard' }
+    { id: 'notice', name: 'Notice', icon: HelpCircle, href: '/notice' },
+    { id: 'portfolio', name: 'Portfolio', icon: User, href: '/portfolio', hasBadge: true },
+    { id: 'dashboard', name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' }
   ];
 
   return (

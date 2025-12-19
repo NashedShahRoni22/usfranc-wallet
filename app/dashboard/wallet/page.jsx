@@ -44,8 +44,6 @@ export default function WalletPage() {
       }
 
       const data = await response.json();
-      console.log(data);
-      
       // Transform API response to match UI format
       const transformedWallets = data?.map((wallet, index) => ({
         id: wallet.id || wallet._id,
