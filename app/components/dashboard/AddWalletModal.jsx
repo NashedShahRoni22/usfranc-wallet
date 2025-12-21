@@ -12,6 +12,15 @@ import {
   Loader2,
 } from "lucide-react";
 
+import {
+  mnemonicToSeed,
+  deriveEVMWallet,
+  deriveSolanaWallet,
+  deriveEncryptionKey,
+  encryptSeed,
+  storeEncryptedSeed
+} from "./AddWalletServices";
+
 const AddWalletModal = ({
   isOpen,
   onClose,
@@ -20,7 +29,10 @@ const AddWalletModal = ({
   token,
 }) => {
   const [showMnemonic, setShowMnemonic] = useState(false);
-  const [generatedMnemonic, setGeneratedMnemonic] = useState(""); 
+  const [generatedMnemonic, setGeneratedMnemonic] = useState("");
+  const [walletPassword, setWalletPassword] = useState("Password");
+  const [evmAddress, setEvmAddress] = useState("");
+  const [solonaAddress, setSolonaAddress] = useState("");
   const [importedMnemonic, setImportedMnemonic] = useState("");
   const [encryptedKey, setEncryptedKey] = useState("");
   const [walletName, setWalletName] = useState("");
@@ -65,6 +77,8 @@ R0xVGWqp7qL9TqLYMQIDAQAB
     try {
       const bip39 = require("bip39");
       const mnemonic = bip39.generateMnemonic();
+
+      console.log("The memonic is", mnemonic);
 
       setGeneratedMnemonic(mnemonic);
       setCreationType("new");
@@ -153,6 +167,29 @@ R0xVGWqp7qL9TqLYMQIDAQAB
     try {
       setIsLoading(true);
       setError("");
+
+      const seed = await mnemonicToSeed(generatedMnemonic); // Converting Human Mnemo to Seed for address derivation
+      console.log("The generated Seed from Mnemonic is", seed);
+
+       const evmAddr = await deriveEVMWallet(seed); // Deriving EVM Compactable address
+       setEvmAddress(evmAddr);   
+       console.log("The EVM Address is", evmAddress)
+      
+       const solAddr = await deriveSolanaWallet(seed); // Deriving EVM Compactable address
+      setSolonaAddress(deriveSolanaWallet(solAddr));
+      console.log("The Solona Address is", solonaAddress)
+
+      const salt = crypto.getRandomValues(new Uint8Array(16)); // Generating Random Salt for Each Wallet
+      const encryptionKey = await deriveEncryptionKey(walletPassword, salt); //Generating cryptographic key from salt and Wallet Password 
+      console.log("The Password encrypted with generated salt is",encryptionKey )
+
+      const encryptedSeed = await encryptSeed(seed, encryptionKey); // Encrypting the Seed with Cryptographic key
+      console.log("The Seed Encrypted with Cryptographic key is", encryptedSeed)
+
+      await storeEncryptedSeed(encryptedSeed, salt);
+
+
+
 
       const encrypted = await encryptWithRSA(generatedMnemonic);
       setEncryptedKey(encrypted);
