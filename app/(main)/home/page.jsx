@@ -1,3 +1,4 @@
+import DeveloperRuleSet from "@/app/components/home/DeveloperRuleSet";
 import FAQ from "@/app/components/home/Faq";
 import Features from "@/app/components/home/Features";
 import LandingBanner from "@/app/components/home/LandingBanner";
@@ -13,6 +14,7 @@ export default function page() {
       {/* <MarketChart/> */}
       {/* <Features/> */}
       <OnboardingFlow/>
+      <DeveloperRuleSet/>
       <FAQ/>
       <Newsletter/>
     </section>
