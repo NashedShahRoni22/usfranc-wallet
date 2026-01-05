@@ -85,15 +85,21 @@ export async function encryptSeed(
   };
 }
 
-const dbPromise = openDB("wallet-db", 1, {
+const dbPromise = openDB("wallet-db", 2, {
   upgrade(db) {
-    db.createObjectStore("keys");
+   if (!db.objectStoreNames.contains("keys")) {
+      db.createObjectStore("keys");
+    }
   },
 });
 
-export async function storeEncryptedSeed(data) {
+export async function storeEncryptedSeed({ ciphertext, iv, salt }, walletId) {
   // data is expected to be an object: { ciphertext, iv, salt }
   const db = await dbPromise;
-  await db.put("keys", data, "encrypted-seed");
+  await db.put(
+    "keys",
+    { ciphertext, iv, salt, walletId },
+    
+  );
 }
 
