@@ -10,6 +10,7 @@ import {
   HomeIcon,
   LayoutDashboard
 } from 'lucide-react';
+import Link from 'next/link';
 
 const CryptoNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,7 +21,7 @@ const CryptoNavbar = () => {
     // { id: 'wallet', name: 'Wallet', icon: Wallet, href: '/wallet' },
     { id: 'security', name: 'Security', icon: Shield, href: '/security' },
     { id: 'notice', name: 'Notice', icon: HelpCircle, href: '/notice' },
-    { id: 'portfolio', name: 'Portfolio', icon: User, href: '/portfolio', hasBadge: true },
+    { id: 'portfolio', name: 'Portfolio', icon: User, href: '/portfolio', },
     { id: 'dashboard', name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' }
   ];
 
@@ -44,16 +45,14 @@ const CryptoNavbar = () => {
             {menuItems.map(item => {
               const Icon = item.icon;
               return (
-                <a
+                <Link
                   key={item.id}
                   href={item.href}
-                  className="relative p-2 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                  className="relative p-2 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-white/5 flex items-center gap-3"
                 >
                   <Icon className="w-5 h-5" />
-                  {item.hasBadge && (
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-blue-500 rounded-full"></span>
-                  )}
-                </a>
+                  <span>{item.name}</span>
+                </Link>
               );
             })}
           </div>
@@ -76,17 +75,14 @@ const CryptoNavbar = () => {
               {menuItems.map(item => {
                 const Icon = item.icon;
                 return (
-                  <a
+                  <Link
                     key={item.id}
                     href={item.href}
                     className="flex items-center space-x-3 px-3 py-3 text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors relative"
                   >
                     <Icon className="w-5 h-5" />
                     <span>{item.name}</span>
-                    {item.hasBadge && (
-                      <span className="absolute right-3 w-2 h-2 bg-blue-500 rounded-full"></span>
-                    )}
-                  </a>
+                  </Link>
                 );
               })}
             </div>

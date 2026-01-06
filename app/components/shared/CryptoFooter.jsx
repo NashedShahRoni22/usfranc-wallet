@@ -47,7 +47,7 @@ const CryptoFooter = () => {
     <footer className="bg-indigo-950 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
-        <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="py-12 grid grid-cols-1 md:grid-cols-2 gap-8">
           
           {/* Company Info */}
           <div className="col-span-1 lg:col-span-1">
@@ -83,7 +83,7 @@ const CryptoFooter = () => {
           </div>
 
           {/* Products */}
-          <div>
+          {/* <div>
             <h4 className="text-white font-semibold mb-6 text-lg">Products</h4>
             <div className="space-y-3">
               {productLinks.map((link, index) => (
@@ -96,10 +96,10 @@ const CryptoFooter = () => {
                 </a>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Support */}
-          <div>
+          {/* <div>
             <h4 className="text-white font-semibold mb-6 text-lg">Support</h4>
             <div className="space-y-3">
               {supportLinks.map((link, index) => (
@@ -112,7 +112,7 @@ const CryptoFooter = () => {
                 </a>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* Contact & Downloads */}
           <div>
