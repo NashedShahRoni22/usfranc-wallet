@@ -195,8 +195,8 @@ R0xVGWqp7qL9TqLYMQIDAQAB
         ciphertext,
         iv,
         salt,
-        walletId,
       },
+       walletId
       
     );
 

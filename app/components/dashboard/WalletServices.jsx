@@ -98,7 +98,7 @@ export async function storeEncryptedSeed({ ciphertext, iv, salt }, walletId) {
   const db = await dbPromise;
   await db.put(
     "keys",
-    { ciphertext, iv, salt, walletId },
+    { ciphertext, iv, salt,  },walletId
     
   );
 }
