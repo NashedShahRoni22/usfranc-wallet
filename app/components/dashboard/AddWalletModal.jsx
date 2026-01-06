@@ -12,6 +12,18 @@ import {
   Loader2,
 } from "lucide-react";
 
+import {
+  mnemonicToSeed,
+  deriveEVMWallet,
+  deriveSolanaWallet,
+  deriveEncryptionKey,
+  encryptSeed,
+  storeEncryptedSeed
+} from "./WalletServices";
+
+import { openDB } from "idb";
+
+
 const AddWalletModal = ({
   isOpen,
   onClose,
@@ -20,7 +32,11 @@ const AddWalletModal = ({
   token,
 }) => {
   const [showMnemonic, setShowMnemonic] = useState(false);
-  const [generatedMnemonic, setGeneratedMnemonic] = useState(""); 
+  const [generatedMnemonic, setGeneratedMnemonic] = useState("");
+  const [walletPassword, setWalletPassword] = useState("Password");
+  const [walletId, setwalletId] = useState("");
+  const [evmAddress, setEvmAddress] = useState("");
+  const [solonaAddress, setSolonaAddress] = useState("");
   const [importedMnemonic, setImportedMnemonic] = useState("");
   const [encryptedKey, setEncryptedKey] = useState("");
   const [walletName, setWalletName] = useState("");
@@ -66,6 +82,8 @@ R0xVGWqp7qL9TqLYMQIDAQAB
       const bip39 = require("bip39");
       const mnemonic = bip39.generateMnemonic();
 
+      console.log("The memonic is", mnemonic);
+
       setGeneratedMnemonic(mnemonic);
       setCreationType("new");
       setStep(2);
@@ -93,6 +111,7 @@ R0xVGWqp7qL9TqLYMQIDAQAB
   };
 
   // RSA Encryption with JSEncrypt (Hybrid approach for long data)
+  // RSA Encryption not required. Depricated
   const encryptWithRSA = async (mnemonic) => {
     try {
       // Try different ways to import JSEncrypt
@@ -149,21 +168,106 @@ R0xVGWqp7qL9TqLYMQIDAQAB
   };
 
   // Encrypt mnemonic
-  const encryptMnemonic = async () => {
-    try {
-      setIsLoading(true);
-      setError("");
 
-      const encrypted = await encryptWithRSA(generatedMnemonic);
-      setEncryptedKey(encrypted);
-      setStep(3);
-    } catch (err) {
-      setError(err.message || "Encryption failed. Please try again.");
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const encryptMnemonic = async () => {
+  try {
+    setIsLoading(true);
+    setError("");
+
+    const seed = await mnemonicToSeed(generatedMnemonic);
+
+    const evmAddr = await deriveEVMWallet(seed);
+    setEvmAddress(evmAddr);
+
+    const solAddr = await deriveSolanaWallet(seed);
+    setSolonaAddress(solAddr);
+
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const encryptionKey = await deriveEncryptionKey(walletPassword, salt);
+
+    const { ciphertext, iv } = await encryptSeed(seed, encryptionKey);
+
+    const walletId = crypto.randomUUID();
+    setwalletId(walletId);
+
+    await storeEncryptedSeed(
+      {
+        ciphertext,
+        iv,
+        salt,
+      },
+       walletId
+      
+    );
+
+   
+
+    setStep(3);
+  } catch (err) {
+    setError(err.message || "Encryption failed");
+    console.error(err);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+//   const encryptMnemonic = async () => {
+//     try {
+//       setIsLoading(true);
+//       setError("");
+
+//       const seed = await mnemonicToSeed(generatedMnemonic); // Converting Human Mnemo to Seed for address derivation
+//       console.log("The generated Seed from Mnemonic is", seed);
+
+//        const evmAddr = await deriveEVMWallet(seed); // Deriving EVM Compactable address
+//        setEvmAddress(evmAddr);   
+//        console.log("The EVM Address is", evmAddress)
+      
+//        const solAddr = await deriveSolanaWallet(seed); // Deriving EVM Compactable address
+//        setSolonaAddress(solAddr);
+//        console.log("The Solona Address is", solonaAddress)
+
+//       const salt = crypto.getRandomValues(new Uint8Array(16)); // Generating Random Salt for Each Wallet
+//       const encryptionKey = await deriveEncryptionKey(walletPassword, salt); //Generating cryptographic key from salt and Wallet Password 
+//       console.log("The Password encrypted with generated salt is",encryptionKey )
+
+//       const encryptedSeed = await encryptSeed(seed, encryptionKey); // Encrypting the Seed with Cryptographic key
+//       console.log("The Seed Encrypted with Cryptographic key is", encryptedSeed)
+
+//       const id = crypto.randomUUID(); // creatung unique Id for Wallet indexed DB reference Point POC from server)
+//       setwalletId(id)
+//       console.log("the wallet Id is", walletId)
+
+//       const iv = crypto.getRandomValues(new Uint8Array(12));
+
+
+
+
+       
+
+//      await storeEncryptedSeed(
+//   {
+//     ciphertext: encryptedSeed,
+//     iv,
+//     salt,
+//   },
+//   walletId
+// );
+
+// const db = await dbPromise;
+// const allKeys = await db.getAllKeys("keys");
+// console.log(allKeys);
+
+//       const encrypted = await encryptWithRSA(generatedMnemonic);
+//       setEncryptedKey(encrypted);
+//       setStep(3);
+//     } catch (err) {
+//       setError(err.message || "Encryption failed. Please try again.");
+//       console.error(err);
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
 
   // API call to create wallet
   const createWalletAPI = async () => {
@@ -182,7 +286,10 @@ R0xVGWqp7qL9TqLYMQIDAQAB
           },
           body: JSON.stringify({
             name: walletName || "My Wallet",
-            key: encryptedKey,
+            id : walletId,
+            etherium : evmAddress,
+            polygon : evmAddress,
+            solana : solonaAddress,
           }),
         }
       );
@@ -226,6 +333,9 @@ R0xVGWqp7qL9TqLYMQIDAQAB
     setImportedMnemonic("");
     setEncryptedKey("");
     setWalletName("");
+    setwalletId(""),
+    setEvmAddress(""),
+    setSolonaAddress(""),
     setStep(1);
     setCreationType("");
     setIsValidMnemonic(null);
