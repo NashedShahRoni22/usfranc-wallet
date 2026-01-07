@@ -10,7 +10,9 @@ import {
   Wallet,
   Settings,
   LogOut,
-  X
+  X,
+  Bitcoin,
+  ArrowUpDown
 } from 'lucide-react';
 
 const DashboardSidebar = ({ isOpen, onClose }) => {
@@ -20,6 +22,8 @@ const DashboardSidebar = ({ isOpen, onClose }) => {
   const menuItems = [
     { id: 'dashboard', name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
     { id: 'wallet', name: 'Wallet', icon: Wallet, href: '/dashboard/wallet' },
+    { id: 'balance', name: 'Balance', icon: Bitcoin, href: '/dashboard/balance' },
+    { id: 'transactions', name: 'Transactions', icon: ArrowUpDown, href: '/dashboard/transactions' },
     { id: 'swap', name: 'Swap', icon: ArrowLeftRight, href: '/dashboard/swap' },
     { id: 'send', name: 'Send', icon: Send, href: '/dashboard/send' },
     { id: 'receive', name: 'Receive', icon: Download, href: '/dashboard/receive' },

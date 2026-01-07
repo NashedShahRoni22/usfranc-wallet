@@ -21,8 +21,6 @@ import {
   storeEncryptedSeed
 } from "./WalletServices";
 
-import { openDB } from "idb";
-
 
 const AddWalletModal = ({
   isOpen,
@@ -33,7 +31,7 @@ const AddWalletModal = ({
 }) => {
   const [showMnemonic, setShowMnemonic] = useState(false);
   const [generatedMnemonic, setGeneratedMnemonic] = useState("");
-  const [walletPassword, setWalletPassword] = useState("Password");
+  const [walletPassword, setWalletPassword] = useState("");
   const [walletId, setwalletId] = useState("");
   const [evmAddress, setEvmAddress] = useState("");
   const [solonaAddress, setSolonaAddress] = useState("");
@@ -45,14 +43,6 @@ const AddWalletModal = ({
   const [isValidMnemonic, setIsValidMnemonic] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-
-  // Fixed public key PEM (RSA 1024-bit)
-  const publicKeyPEM = `-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC0cOtPjzABybjzm3fCg1aCYwnx
-PmjXpbCkecAWLj/Cij1mJbFRuBuKxdB0V8I9xLp5vHCaXxPKJGvL3L3lLfJKjKcP
-8OxS1x6VfxLtlBFxCp0kTYfCGOp0eqQSZwjMQJGjJiP6qPNxCJGmW4eLCvM3fBvC
-R0xVGWqp7qL9TqLYMQIDAQAB
------END PUBLIC KEY-----`;
 
   // Validate BIP39 mnemonic using bip39 library
   const validateBIP39 = (mnemonic) => {
@@ -81,9 +71,6 @@ R0xVGWqp7qL9TqLYMQIDAQAB
     try {
       const bip39 = require("bip39");
       const mnemonic = bip39.generateMnemonic();
-
-      console.log("The memonic is", mnemonic);
-
       setGeneratedMnemonic(mnemonic);
       setCreationType("new");
       setStep(2);
@@ -110,65 +97,8 @@ R0xVGWqp7qL9TqLYMQIDAQAB
     setStep(2);
   };
 
-  // RSA Encryption with JSEncrypt (Hybrid approach for long data)
-  // RSA Encryption not required. Depricated
-  const encryptWithRSA = async (mnemonic) => {
-    try {
-      // Try different ways to import JSEncrypt
-      let JSEncryptClass;
-      try {
-        const JSEncryptModule = require("jsencrypt");
-        JSEncryptClass =
-          JSEncryptModule.JSEncrypt ||
-          JSEncryptModule.default ||
-          JSEncryptModule;
-      } catch (e) {
-        console.warn("JSEncrypt not available, using fallback");
-        return btoa(mnemonic);
-      }
-
-      const encrypt = new JSEncryptClass();
-
-      // Set the public key
-      encrypt.setPublicKey(publicKeyPEM);
-
-      // Test if the key is valid by getting the key
-      const keyValid = encrypt.getPublicKey();
-      if (!keyValid) {
-        console.warn("Public key appears invalid, using fallback");
-        return btoa(mnemonic);
-      }
-
-      // RSA 1024-bit can only encrypt ~117 bytes at a time
-      // For longer data, we need to split it into chunks
-      const maxLength = 100;
-      const chunks = [];
-
-      for (let i = 0; i < mnemonic.length; i += maxLength) {
-        const chunk = mnemonic.substring(i, i + maxLength);
-        const encryptedChunk = encrypt.encrypt(chunk);
-
-        if (!encryptedChunk || encryptedChunk === false) {
-          console.warn("RSA encryption failed, using fallback");
-          // Fallback: Simple Base64 encoding (NOT SECURE - only for testing)
-          return btoa(mnemonic);
-        }
-
-        chunks.push(encryptedChunk);
-      }
-
-      // Join chunks with a delimiter
-      return chunks.join("|||");
-    } catch (error) {
-      console.error("Encryption error:", error);
-      console.warn("Using fallback Base64 encoding");
-      // Fallback: Simple Base64 encoding (NOT SECURE - only for testing)
-      return btoa(mnemonic);
-    }
-  };
 
   // Encrypt mnemonic
-
   const encryptMnemonic = async () => {
   try {
     setIsLoading(true);
@@ -211,65 +141,6 @@ R0xVGWqp7qL9TqLYMQIDAQAB
   }
 };
 
-//   const encryptMnemonic = async () => {
-//     try {
-//       setIsLoading(true);
-//       setError("");
-
-//       const seed = await mnemonicToSeed(generatedMnemonic); // Converting Human Mnemo to Seed for address derivation
-//       console.log("The generated Seed from Mnemonic is", seed);
-
-//        const evmAddr = await deriveEVMWallet(seed); // Deriving EVM Compactable address
-//        setEvmAddress(evmAddr);   
-//        console.log("The EVM Address is", evmAddress)
-      
-//        const solAddr = await deriveSolanaWallet(seed); // Deriving EVM Compactable address
-//        setSolonaAddress(solAddr);
-//        console.log("The Solona Address is", solonaAddress)
-
-//       const salt = crypto.getRandomValues(new Uint8Array(16)); // Generating Random Salt for Each Wallet
-//       const encryptionKey = await deriveEncryptionKey(walletPassword, salt); //Generating cryptographic key from salt and Wallet Password 
-//       console.log("The Password encrypted with generated salt is",encryptionKey )
-
-//       const encryptedSeed = await encryptSeed(seed, encryptionKey); // Encrypting the Seed with Cryptographic key
-//       console.log("The Seed Encrypted with Cryptographic key is", encryptedSeed)
-
-//       const id = crypto.randomUUID(); // creatung unique Id for Wallet indexed DB reference Point POC from server)
-//       setwalletId(id)
-//       console.log("the wallet Id is", walletId)
-
-//       const iv = crypto.getRandomValues(new Uint8Array(12));
-
-
-
-
-       
-
-//      await storeEncryptedSeed(
-//   {
-//     ciphertext: encryptedSeed,
-//     iv,
-//     salt,
-//   },
-//   walletId
-// );
-
-// const db = await dbPromise;
-// const allKeys = await db.getAllKeys("keys");
-// console.log(allKeys);
-
-//       const encrypted = await encryptWithRSA(generatedMnemonic);
-//       setEncryptedKey(encrypted);
-//       setStep(3);
-//     } catch (err) {
-//       setError(err.message || "Encryption failed. Please try again.");
-//       console.error(err);
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-  // API call to create wallet
   const createWalletAPI = async () => {
     try {
       setIsLoading(true);
@@ -333,6 +204,7 @@ R0xVGWqp7qL9TqLYMQIDAQAB
     setImportedMnemonic("");
     setEncryptedKey("");
     setWalletName("");
+    setWalletPassword(""),
     setwalletId(""),
     setEvmAddress(""),
     setSolonaAddress(""),
@@ -424,13 +296,26 @@ R0xVGWqp7qL9TqLYMQIDAQAB
 
               <div>
                 <label className="block text-slate-400 text-sm mb-2">
-                  Wallet Name
+                  Name
                 </label>
                 <input
                   type="text"
                   value={walletName}
                   onChange={(e) => setWalletName(e.target.value)}
                   placeholder="My Wallet"
+                  className="w-full bg-slate-800/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-400 text-sm mb-2">
+                  Password
+                </label>
+                <input
+                  type="text"
+                  value={walletPassword}
+                  onChange={(e) => setWalletPassword(e.target.value)}
+                  placeholder="@StrongPassword123"
                   className="w-full bg-slate-800/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all"
                 />
               </div>
@@ -634,14 +519,14 @@ R0xVGWqp7qL9TqLYMQIDAQAB
                 </div>
               </div>
 
-              <div className="bg-slate-800/50 rounded-xl p-6 border border-white/10">
+              {/* <div className="bg-slate-800/50 rounded-xl p-6 border border-white/10">
                 <p className="text-slate-400 text-sm mb-3">
                   Encrypted Key (RSA 1024-bit)
                 </p>
                 <div className="bg-slate-900 rounded-lg p-4 font-mono text-xs text-slate-300 break-all max-h-32 overflow-y-auto">
                   {encryptedKey}
                 </div>
-              </div>
+              </div> */}
 
               <div className="flex gap-3">
                 <button

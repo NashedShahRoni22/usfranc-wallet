@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react';
 import { 
   Plus,
   Copy,
-  RefreshCw,
-  Key,
   Trash2,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  Wallet
 } from 'lucide-react';
 import AddWalletModal from '@/app/components/dashboard/AddWalletModal';
 import { useApp } from '@/app/context/AppContext';
+import { toast } from 'react-toastify';
 
 export default function WalletPage() {
   const { user } = useApp();
@@ -19,7 +19,6 @@ export default function WalletPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   
-  // Fetch all wallets on component mount
   useEffect(() => {
     if (user.clientId && user.token) {
       fetchWallets();
@@ -44,18 +43,7 @@ export default function WalletPage() {
       }
 
       const data = await response.json();
-      // Transform API response to match UI format
-      const transformedWallets = data?.map((wallet, index) => ({
-        id: wallet.id || wallet._id,
-        name: wallet.name,
-        address: wallet.address || wallet.publicKey || 'N/A',
-        chain: wallet.blockchain || 'Ethereum',
-        balance: wallet.balance || '0 ETH',
-        icon: getChainIcon(wallet.blockchain),
-        color: getChainColor(index)
-      })) || [];
-
-      setWallets(transformedWallets);
+      setWallets(data || []);
     } catch (err) {
       console.error('Error fetching wallets:', err);
       setError('Failed to load wallets. Please try again.');
@@ -64,51 +52,14 @@ export default function WalletPage() {
     }
   };
 
-  const getChainIcon = (blockchain) => {
-    const icons = {
-      'Ethereum': '⟠',
-      'Polygon': '⬡',
-      'Solana': '◎',
-      'Bitcoin': '₿'
-    };
-    return icons[blockchain] || '⟠';
-  };
-
-  const getChainColor = (index) => {
-    const colors = [
-      'from-purple-500 to-indigo-600',
-      'from-violet-500 to-purple-600',
-      'from-blue-500 to-indigo-600',
-      'from-cyan-500 to-blue-600',
-      'from-teal-500 to-cyan-600'
-    ];
-    return colors[index % colors.length];
-  };
-
-  const handleCreateWallet = async (walletData) => {
-    // Wallet is already created via API in the modal
-    // Just refresh the wallet list
+  const handleCreateWallet = async () => {
     await fetchWallets();
     setShowAddWallet(false);
   };
 
-  const getBalance = async (walletId) => {
-    try {
-      // Implement balance fetching logic here
-      // For now, just simulate a balance update
-      setWallets(wallets.map(w => 
-        w.id === walletId 
-          ? { ...w, balance: (Math.random() * 10).toFixed(4) + ' ' + w.chain.split(' ')[0] }
-          : w
-      ));
-    } catch (err) {
-      console.error('Error fetching balance:', err);
-    }
-  };
-
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    // Optional: Add toast notification here
+    toast.success('Address copied to clipboard!');
   };
 
   const deleteWallet = async (walletId) => {
@@ -117,21 +68,31 @@ export default function WalletPage() {
     }
 
     try {
-      // Implement delete API call here
-      // const response = await fetch(`http://localhost:8090/v1/v1/wallet/delete/${walletId}`, {
-      //   method: 'DELETE',
-      //   headers: {
-      //     'Authorization': `Bearer ${user.token}`,
-      //     'clientId': user.clientId
-      //   }
-      // });
+      const response = await fetch(`https://server.usfrancwallet.com/v1/wallet/delete/${walletId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+          'clientId': user.clientId
+        }
+      });
 
-      // For now, just remove from state
-      setWallets(wallets.filter(w => w.id !== walletId));
+      if (!response.ok) {
+        throw new Error('Failed to delete wallet');
+      }
+
+      await fetchWallets();
     } catch (err) {
       console.error('Error deleting wallet:', err);
       alert('Failed to delete wallet');
     }
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
   };
 
   return (
@@ -181,7 +142,7 @@ export default function WalletPage() {
         /* Empty State */
         <div className="flex flex-col items-center justify-center py-20">
           <div className="w-20 h-20 bg-slate-800/50 rounded-2xl flex items-center justify-center mb-6">
-            <Key className="w-10 h-10 text-slate-600" />
+            <Wallet className="w-10 h-10 text-slate-600" />
           </div>
           <h3 className="text-xl font-bold text-white mb-2">No Wallets Yet</h3>
           <p className="text-slate-400 mb-6 text-center max-w-md">
@@ -202,12 +163,12 @@ export default function WalletPage() {
             <div key={wallet.id} className="bg-slate-900/50 backdrop-blur-xl rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-4">
-                  <div className={`w-14 h-14 bg-gradient-to-r ${wallet.color} rounded-xl flex items-center justify-center shadow-lg text-2xl`}>
-                    {wallet.icon}
+                  <div className="w-14 h-14 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <Wallet className="w-7 h-7 text-white" />
                   </div>
                   <div>
                     <h3 className="text-white font-bold text-lg">{wallet.name}</h3>
-                    <p className="text-slate-400 text-sm">{wallet.chain}</p>
+                    <p className="text-slate-400 text-xs">Created {formatDate(wallet.created_at)}</p>
                   </div>
                 </div>
                 <button
@@ -218,51 +179,57 @@ export default function WalletPage() {
                 </button>
               </div>
 
-              <div className="space-y-4">
-                {/* Address */}
-                <div className="p-4 bg-slate-800/50 rounded-xl border border-white/5">
-                  <p className="text-slate-400 text-xs mb-2">Public Address</p>
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-white text-sm font-mono truncate">{wallet.address}</p>
-                    <button
-                      onClick={() => copyToClipboard(wallet.address)}
-                      className="p-2 hover:bg-white/5 rounded-lg transition-all"
-                      title="Copy address"
-                    >
-                      <Copy className="w-4 h-4 text-slate-400" />
-                    </button>
+              <div className="space-y-3">
+                {/* Ethereum Address */}
+                {wallet.eth_address && (
+                  <div className="p-3 bg-slate-800/50 rounded-xl border border-white/5">
+                    <p className="text-slate-400 text-xs mb-1.5">Ethereum Address</p>
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-white text-sm font-mono truncate">{wallet.eth_address}</p>
+                      <button
+                        onClick={() => copyToClipboard(wallet.eth_address)}
+                        className="p-1.5 hover:bg-white/5 rounded-lg transition-all flex-shrink-0"
+                        title="Copy address"
+                      >
+                        <Copy className="w-4 h-4 text-slate-400" />
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
 
-                {/* Balance */}
-                <div className="p-4 bg-slate-800/50 rounded-xl border border-white/5">
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-slate-400 text-xs">Balance</p>
-                    <button
-                      onClick={() => getBalance(wallet.id)}
-                      className="p-1 hover:bg-white/5 rounded transition-all"
-                      title="Refresh balance"
-                    >
-                      <RefreshCw className="w-3 h-3 text-slate-400" />
-                    </button>
+                {/* Polygon Address */}
+                {wallet.polygon_address && (
+                  <div className="p-3 bg-slate-800/50 rounded-xl border border-white/5">
+                    <p className="text-slate-400 text-xs mb-1.5">Polygon Address</p>
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-white text-sm font-mono truncate">{wallet.polygon_address}</p>
+                      <button
+                        onClick={() => copyToClipboard(wallet.polygon_address)}
+                        className="p-1.5 hover:bg-white/5 rounded-lg transition-all flex-shrink-0"
+                        title="Copy address"
+                      >
+                        <Copy className="w-4 h-4 text-slate-400" />
+                      </button>
+                    </div>
                   </div>
-                  <p className="text-white text-xl font-bold">{wallet.balance}</p>
-                </div>
+                )}
 
-                {/* Actions */}
-                <div className="flex gap-2">
-                  <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 rounded-lg transition-all border border-blue-500/20">
-                    <Key className="w-4 h-4" />
-                    <span className="text-sm">Get Key</span>
-                  </button>
-                  <button
-                    onClick={() => getBalance(wallet.id)}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 rounded-lg transition-all border border-emerald-500/20"
-                  >
-                    <RefreshCw className="w-4 h-4" />
-                    <span className="text-sm">Refresh</span>
-                  </button>
-                </div>
+                {/* Solana Address */}
+                {wallet.solana_address && (
+                  <div className="p-3 bg-slate-800/50 rounded-xl border border-white/5">
+                    <p className="text-slate-400 text-xs mb-1.5">Solana Address</p>
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-white text-sm font-mono truncate">{wallet.solana_address}</p>
+                      <button
+                        onClick={() => copyToClipboard(wallet.solana_address)}
+                        className="p-1.5 hover:bg-white/5 rounded-lg transition-all flex-shrink-0"
+                        title="Copy address"
+                      >
+                        <Copy className="w-4 h-4 text-slate-400" />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ))}
