@@ -18,7 +18,8 @@ import {
   deriveSolanaWallet,
   deriveEncryptionKey,
   encryptSeed,
-  storeEncryptedSeed
+  storeEncryptedSeed,
+  deriveLitecoinAddresses
 } from "./WalletServices";
 
 
@@ -106,11 +107,22 @@ const AddWalletModal = ({
 
     const seed = await mnemonicToSeed(generatedMnemonic);
 
+    
+
+    const liteAddress = await deriveLitecoinAddresses(seed);
+
+    console.log("the lite coin address is", liteAddress);
+
     const evmAddr = await deriveEVMWallet(seed);
     setEvmAddress(evmAddr);
 
+    
+
     const solAddr = await deriveSolanaWallet(seed);
     setSolonaAddress(solAddr);
+
+        
+
 
     const salt = crypto.getRandomValues(new Uint8Array(16));
     const encryptionKey = await deriveEncryptionKey(walletPassword, salt);

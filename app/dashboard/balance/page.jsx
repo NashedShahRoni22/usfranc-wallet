@@ -76,38 +76,42 @@ export default function BalancePage() {
     setError("");
     setBalanceData(null);
 
+    let url = "";
+
     try {
-      let url = "";
+      
 
       if (selectedChain === "ethereum") {
         if (selectedType === "native") {
-          url = `https://server.usfrancallet.com/v1/wallet/ethereum/native/balance?address=${address}`;
+          url = `https://server.usfrancwallet.com/v1/wallet/ethereum/native/balance?address=${address}`;
         } else {
-          url = `https://server.usfrancallet.com/v1/wallet/ethereum/erc20/balance?address=${address}`;
+          url = `https://server.usfrancwallet.com/v1/wallet/ethereum/erc20/balance?address=${address}`;
         }
       } else if (selectedChain === "polygon") {
         if (selectedType === "native") {
-          url = `https://server.usfrancallet.com/v1/wallet/polygon/native/balance?address=${address}`;
+          url = `https://server.usfrancwallet.com/v1/wallet/polygon/native/balance?address=${address}`;
         } else {
-          url = `https://server.usfrancallet.com/v1/wallet/polygon/erc20/balance?address=${address}`;
+          url = `https://server.usfrancwallet.com/v1/wallet/polygon/erc20/balance?address=${address}`;
         }
       } else if (selectedChain === "solana") {
         if (selectedType === "native") {
-          url = `https://server.usfrancallet.com/v1/wallet/solona/native/balance/?address=${address}`;
+          url = `https://server.usfrancwallet.com/v1/wallet/solona/native/balance?address=${address}`;
         } else {
-          url = `https://server.usfrancallet.com/v1/wallet/solona/spl/balance/?address=${address}`;
+          url = `https://server.usfrancwallet.com/v1/wallet/solona/spl/balance?address=${address}`;
         }
-      }
+      } 
 
       const response = await fetch(url, {
+        
         method: "GET",
         headers: {
           Authorization: `Bearer ${user.token}`,
           clientId: user.clientId,
         },
       });
+      
 
-      console.log(response);
+      console.log("the response is", response);
 
       if (!response.ok) {
         throw new Error("Failed to fetch balance");
@@ -116,6 +120,7 @@ export default function BalancePage() {
       const data = await response.json();
       setBalanceData(data);
     } catch (err) {
+      console.log("the fetch url is", url)
       console.error("Error fetching balance:", err);
       setError(
         "Failed to fetch balance. Please check the address and try again."

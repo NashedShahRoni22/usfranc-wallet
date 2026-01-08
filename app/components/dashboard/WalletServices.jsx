@@ -7,6 +7,14 @@ import { Keypair } from "@solana/web3.js";
 import { derivePath } from "ed25519-hd-key";
 import { argon2id } from 'hash-wasm';
 import { openDB } from "idb";
+import * as bitcoin from "bitcoinjs-lib";
+import * as bip32 from "bip32";
+import * as ecc from "tiny-secp256k1";
+
+
+bitcoin.initEccLib(ecc);
+
+
 
 // service to Convert Mnemonic to Seed BIP39 Global standard.
 export async function mnemonicToSeed(mnemonic) {
@@ -17,6 +25,61 @@ export async function mnemonicToSeed(mnemonic) {
   const seed = await bip39.mnemonicToSeed(mnemonic);
   return new Uint8Array(seed);
 }
+
+
+//Lite Coin representaion
+
+// Litecoin Derivation Path (BIP-44)
+
+export const litecoinNetwork = {
+  messagePrefix: "\x19Litecoin Signed Message:\n",
+  bech32: "ltc",
+  bip32: {
+    public: 0x019da462,
+    private: 0x019d9cfe,
+  },
+  pubKeyHash: 0x30, // L addresses
+  scriptHash: 0x32, // M addresses
+  wif: 0xb0,
+};
+
+
+
+export async function deriveLitecoinAddresses(seed) {
+  // seed: Uint8Array (from mnemonicToSeed)
+  const root = bip32.BIP32Factory(ecc).fromSeed(seed, litecoinNetwork);
+
+  // --- Legacy (BIP44) ---
+  const legacyNode = root.derivePath("m/44'/2'/0'/0/0");
+  const legacy = bitcoin.payments.p2pkh({
+    pubkey: legacyNode.publicKey,
+    network: litecoinNetwork,
+  }).address;
+
+  // --- P2SH-SegWit (BIP49) ---
+  const segwitP2SHNode = root.derivePath("m/49'/2'/0'/0/0");
+  const segwitP2SH = bitcoin.payments.p2sh({
+    redeem: bitcoin.payments.p2wpkh({
+      pubkey: segwitP2SHNode.publicKey,
+      network: litecoinNetwork,
+    }),
+    network: litecoinNetwork,
+  }).address;
+
+  // --- Native SegWit (BIP84) ---
+  const segwitNativeNode = root.derivePath("m/84'/2'/0'/0/0");
+  const segwitNative = bitcoin.payments.p2wpkh({
+    pubkey: segwitNativeNode.publicKey,
+    network: litecoinNetwork,
+  }).address;
+
+  return {
+    legacy,          // L...
+    segwitP2SH,      // M...
+    segwitNative,    // ltc1...
+  };
+}
+
 
 
 
