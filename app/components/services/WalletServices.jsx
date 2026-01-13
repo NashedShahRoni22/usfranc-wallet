@@ -148,7 +148,7 @@ export async function encryptSeed(
   };
 }
 
-const dbPromise = openDB("wallet-db", 2, {
+export const dbPromise = openDB("wallet-db", 2, {
   upgrade(db) {
    if (!db.objectStoreNames.contains("keys")) {
       db.createObjectStore("keys");
@@ -165,4 +165,7 @@ export async function storeEncryptedSeed({ ciphertext, iv, salt }, walletId) {
     
   );
 }
+
+
+
 

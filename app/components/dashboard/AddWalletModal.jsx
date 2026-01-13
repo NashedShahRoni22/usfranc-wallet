@@ -20,7 +20,9 @@ import {
   encryptSeed,
   storeEncryptedSeed,
   deriveLitecoinAddresses
-} from "./WalletServices";
+} from "../services/WalletServices";
+
+import { unlockWallet,deriveEthereumPrivateKey } from "../services/TransferServices";
 
 
 const AddWalletModal = ({
@@ -34,6 +36,9 @@ const AddWalletModal = ({
   const [generatedMnemonic, setGeneratedMnemonic] = useState("");
   const [walletPassword, setWalletPassword] = useState("");
   const [walletId, setwalletId] = useState("");
+  const [ciphertext, setCiphertext] = useState(""); //Use for Encrypted Seed
+  const [iv, setIv] = useState(""); //Use for Rounds of IV
+  const [salt, setSalt ]= useState(""); // Set Unique Salt value generated for Each wallet
   const [evmAddress, setEvmAddress] = useState("");
   const [solonaAddress, setSolonaAddress] = useState("");
   const [importedMnemonic, setImportedMnemonic] = useState("");
@@ -105,12 +110,18 @@ const AddWalletModal = ({
     setIsLoading(true);
     setError("");
 
+    // const decryptedseed = await unlockWallet("c7d11de5-4f55-43a9-a0dc-976bed7ff910", "Password");
+    // console.log("The decrypted seed is", decryptedseed); // For tetsing Purpose, Do not remove
+
+    // const ethkeyfromseed = await deriveEthereumPrivateKey(decryptedseed);
+    // console.log("ethkeyfromseed is", ethkeyfromseed) // For tetsing Purpose, Do not remove
+
     const seed = await mnemonicToSeed(generatedMnemonic);
 
     
-
+    // Do not remove will be used later to derive USFRANC Coin address
+    // Same Approach
     const liteAddress = await deriveLitecoinAddresses(seed);
-
     console.log("the lite coin address is", liteAddress);
 
     const evmAddr = await deriveEVMWallet(seed);
@@ -124,23 +135,21 @@ const AddWalletModal = ({
         
 
 
-    const salt = crypto.getRandomValues(new Uint8Array(16));
-    const encryptionKey = await deriveEncryptionKey(walletPassword, salt);
+    const saltValue =  crypto.getRandomValues(new Uint8Array(16));
+     setSalt(saltValue);
+
+    const encryptionKey = await deriveEncryptionKey(walletPassword, saltValue);
+
+    
 
     const { ciphertext, iv } = await encryptSeed(seed, encryptionKey);
+    setCiphertext(ciphertext);
+    setIv(iv);
 
     const walletId = crypto.randomUUID();
     setwalletId(walletId);
 
-    await storeEncryptedSeed(
-      {
-        ciphertext,
-        iv,
-        salt,
-      },
-       walletId
-      
-    );
+    
 
    
 
@@ -157,6 +166,16 @@ const AddWalletModal = ({
     try {
       setIsLoading(true);
       setError("");
+
+      await storeEncryptedSeed(
+      {
+        ciphertext,
+        iv,
+        salt,
+      },
+       walletId
+      
+    );
 
       const response = await fetch(
         "https://server.usfrancwallet.com/v1/wallet/add/new",
@@ -226,6 +245,9 @@ const AddWalletModal = ({
     setIsLoading(false);
     setError("");
     onClose();
+    setCiphertext(""),
+    setIv(""),
+    setSalt("")
   };
 
   if (!isOpen) return null;
