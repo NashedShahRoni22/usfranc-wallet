@@ -1,0 +1,1 @@
+1. IndexedDB || wallet-db data getting

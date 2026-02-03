@@ -68,7 +68,7 @@ export default function WalletPage() {
     }
 
     try {
-      const response = await fetch(`https://server.usfrancwallet.com/v1/wallet/delete/${walletId}`, {
+      const response = await fetch(`https://server.usfrancwallet.com/v1/wallet/remove/${walletId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user.token}`,

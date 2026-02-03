@@ -1,4 +1,3 @@
-import React from 'react'
 import CryptoNavbar from '../components/shared/CryptoNavbar'
 import CryptoFooter from '../components/shared/CryptoFooter'
 
